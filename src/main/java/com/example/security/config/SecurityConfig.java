@@ -20,12 +20,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeRequests()
-                .antMatchers("/user/**").authenticated()
+                .antMatchers("/user/**").authenticated() // 회원이면(인증만 되면) 들어갈 수 있음.
                 .antMatchers("/manager/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_MANAGER')")
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/loginForm");
+                .loginPage("/loginForm")
+                .loginProcessingUrl("/login") // "/login" 호출되면 Security가 낚아채서 대신 로그인 진행함.
+                .defaultSuccessUrl("/"); // 어떠한 요청을 하고 로그인폼으로 리다이렉트된 후 로그인을 하면 원래 요청했던 페이지로 리다이렉트 됨.
     }
 }
