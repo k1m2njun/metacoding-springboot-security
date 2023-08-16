@@ -21,13 +21,28 @@ import java.util.Map;
 public class PrincipalDetails implements UserDetails, OAuth2User {
 
     private User user; // 컴포지션
+    private Map<String, Object> attributes;
 
+    // 일반 로그인용 생성자
     public PrincipalDetails(User user) {
         this.user = user;
+
+        // UserDetails, OAuth2User 는 User 오브젝트를 들고 있지 않음.
+        // 그래서 PrincipalDetails가 이 둘을 상속받아 User 오브젝트를 컴포지션으로 들고있게 함.
+        // 그러니 외부에서 OAuth든 기존 로그인이든 PrincipalDetails 의존성을 주입하면
+        // 로그인 사용자 정보 principal 를 꺼낼 수 있음
     }
 
-    // 해당 User의 권한을 리턴함
-    @Override
+    // OAuth 로그인용 생성자
+    public PrincipalDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    /**
+     * UserDetails Override
+     */
+    @Override // 해당 User의 권한을 리턴함
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
         collection.add(new GrantedAuthority() {
@@ -69,14 +84,17 @@ public class PrincipalDetails implements UserDetails, OAuth2User {
         return true;
     }
 
-    // OAuth2User Override
+    /**
+     * OAuth2User Override
+     */
     @Override
     public String getName() {
+//        return attributes.get("sub").toString();
         return null;
     }
 
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return attributes;
     }
 }

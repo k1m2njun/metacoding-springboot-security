@@ -4,6 +4,7 @@ import com.example.security.config.auth.PrincipalDetails;
 import com.example.security.model.User;
 import com.example.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ public class IndexController {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
+    @Autowired @Lazy
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @GetMapping("/test/login")
@@ -54,10 +55,11 @@ public class IndexController {
         return "index";
     }
 
+    // OAuth, 일반 로그인 둘 다 PrincipalDetails 로 받을 수 있음.
     @GetMapping("/user")
     public @ResponseBody String user(@AuthenticationPrincipal PrincipalDetails principalDetails) {
 
-        return "user";
+        return principalDetails.getUser().toString();
     }
 
     @GetMapping("/admin")

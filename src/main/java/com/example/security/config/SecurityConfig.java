@@ -32,11 +32,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
                 .anyRequest().permitAll()
                 .and()
+
                 .formLogin()
                 .loginPage("/loginForm")
                 .loginProcessingUrl("/login") // "/login" 호출되면 Security가 낚아채서 대신 로그인 진행함.
                 .defaultSuccessUrl("/") // 어떠한 요청을 하고 로그인폼으로 리다이렉트된 후 로그인을 하면 원래 요청했던 페이지로 리다이렉트 됨.
                 .and()
+
                 .oauth2Login()
                 .loginPage("/loginForm") // 구글 로그인이 완료된 뒤의 후처리가 필요함.
                 // 1.코드(인증) - 2.엑세스토큰(권한) - 3.사용자프로필정보 - 4.회원가입 / 추가정보입력
