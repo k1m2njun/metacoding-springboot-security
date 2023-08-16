@@ -1,6 +1,9 @@
 package com.example.security.config.auth.oauth;
 
 import com.example.security.config.auth.PrincipalDetails;
+import com.example.security.config.auth.oauth.provider.FacebookUserInfo;
+import com.example.security.config.auth.oauth.provider.GoogleUserInfo;
+import com.example.security.config.auth.oauth.provider.OAuth2UserInfo;
 import com.example.security.model.User;
 import com.example.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +26,23 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
 
     // 구글로부터 받은 userRequest 데이터에 대한 후처리 되는 함수
     // userRequest에는 엑세스토큰, User정보 등이 포함되어 있다.
+    // 함수 종료 시 @AuthenticationPrincpal 어노테이션이 만들어 진다.
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
 
         // 회원가입 강제로 진행하기 위한 회원 정보를 리턴 받음
-        OAuth2User oAuth2User = super.loadUser(userRequest);
+        OAuth2User oauth2User = super.loadUser(userRequest);
 
-        String provider = userRequest.getClientRegistration().getClientId(); // google
-        String providerId = oAuth2User.getAttribute("sub"); // 12238572398509
+        OAuth2UserInfo oauth2UserInfo = null;
+        if (userRequest.getClientRegistration().getRegistrationId().equals("google"))
+            oauth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
+        if (userRequest.getClientRegistration().getRegistrationId().equals("facebook"))
+            oauth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
+
+        String provider = oauth2UserInfo.getProvider();
+        String providerId = oauth2UserInfo.getProviderId(); // 12238572398509
         String username = provider + "_" + providerId; // google_12238572398509
-        String email = oAuth2User.getAttribute("email");
+        String email = oauth2UserInfo.getEmail();
         String password = bCryptPasswordEncoder.encode("k1m2njun"); // 비밀번호 의미 없음
         String role = "ROLE_USER";
 
@@ -49,6 +59,6 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             userRepository.save(userEntity);
         }
 
-        return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+        return new PrincipalDetails(userEntity, oauth2User.getAttributes());
     }
 }

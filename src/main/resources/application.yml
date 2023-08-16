@@ -7,6 +7,12 @@ server:
       enabled: true
       force: true
 
+#  ssl:
+#    key-store: ${SSL_KEY_STORE}
+#    key-store-type: ${SSL_KEY_STORE_TYPE}
+#    key-store-password: ${SSL_KEY_STORE_PASSWORD}
+#    key-alias: ${SSL_KEY_ALIAS}
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -26,8 +32,15 @@ spring:
       client:
         registration:
           google:
-            client-id: ${CLIENT_ID}
-            client-secret: ${CLIENT_SECRET}
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
+          facebook:
+            client-id: ${FACEBOOK_CLIENT_ID}
+            client-secret: ${FACEBOOK_CLIENT_SECRET}
+            scope:
+              - email
+              - public_profile
+          # facebook scope 정보 https://developers.facebook.com/docs/facebook-login/web/
