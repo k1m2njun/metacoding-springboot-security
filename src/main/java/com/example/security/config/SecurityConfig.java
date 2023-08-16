@@ -1,5 +1,7 @@
 package com.example.security.config;
 
+import com.example.security.config.auth.oauth.PrincipalOauth2UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -12,6 +14,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity // 스프링 시큐리티 필터가 스프링 필터체인에 등록된다.
 @EnableGlobalMethodSecurity(securedEnabled = true, prePostEnabled = true) // secured 어노테이션 활성화 -> 특정 메서드에 접근권한을 줄 수 있음, preAuthorize, postAuthorize 어노테이션 활성
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private PrincipalOauth2UserService principalOauth2UserService;
 
     @Bean // 해당 메서드가 리턴하는 오브젝트를 IoC로 등록해준다.
     public BCryptPasswordEncoder encoder() {
@@ -33,6 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/") // 어떠한 요청을 하고 로그인폼으로 리다이렉트된 후 로그인을 하면 원래 요청했던 페이지로 리다이렉트 됨.
                 .and()
                 .oauth2Login()
-                .loginPage("/loginForm"); // 구글 로그인이 완료된 뒤의 후처리가 필요함.
+                .loginPage("/loginForm") // 구글 로그인이 완료된 뒤의 후처리가 필요함.
+                // 1.코드(인증) - 2.엑세스토큰(권한) - 3.사용자프로필정보 - 4.회원가입 / 추가정보입력
+                // 그런데 구글 로그인 시 코드X, 엑세스토큰+사용자프로필정보O
+                .userInfoEndpoint()
+                .userService(principalOauth2UserService);
     }
 }
