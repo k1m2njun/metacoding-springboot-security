@@ -3,6 +3,7 @@ package com.example.security.config.auth.oauth;
 import com.example.security.config.auth.PrincipalDetails;
 import com.example.security.config.auth.oauth.provider.FacebookUserInfo;
 import com.example.security.config.auth.oauth.provider.GoogleUserInfo;
+import com.example.security.config.auth.oauth.provider.NaverUserInfo;
 import com.example.security.config.auth.oauth.provider.OAuth2UserInfo;
 import com.example.security.model.User;
 import com.example.security.repository.UserRepository;
@@ -14,6 +15,8 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Service
 public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
@@ -38,6 +41,8 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oauth2UserInfo = new GoogleUserInfo(oauth2User.getAttributes());
         if (userRequest.getClientRegistration().getRegistrationId().equals("facebook"))
             oauth2UserInfo = new FacebookUserInfo(oauth2User.getAttributes());
+        if (userRequest.getClientRegistration().getRegistrationId().equals("naver"))
+            oauth2UserInfo = new NaverUserInfo((Map) oauth2User.getAttributes().get("response"));
 
         String provider = oauth2UserInfo.getProvider();
         String providerId = oauth2UserInfo.getProviderId(); // 12238572398509

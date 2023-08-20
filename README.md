@@ -1,5 +1,10 @@
 ### 유튜브 채널 메타코딩(최주호 강사님) - 스프링 시큐리티 강의
-### <a href="https://www.youtube.com/watch?v=nVCEJv6eA-w&list=PL93mKxaRDidERCyMaobSLkvSPzYtIk0Ah&index=1">➬ 바로가기</a>
+### <a href="https://www.youtube.com/watch?v=nVCEJv6eA-w&list=PL93mKxaRDidERCyMaobSLkvSPzYtIk0Ah&index=1">➬ 유튜브 강의 바로가기</a>
+### <a href="https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-%EC%8B%9C%ED%81%90%EB%A6%AC%ED%8B%B0/dashboard=1">➬ 인프런 강의 바로가기</a>
+
+참고) <br>
+화질, 음질은 인프런보다 유튜브가 나은 것 같습니다.
+유튜브의 경우 최대 1080p, 인프런은 720p까지 설정이 가능하고 음질은 인프런이 살짝 끊기는 느낌이 있고 유튜브에 비해 소리가 작네요. (2023/08/20 작성)
 
 ---
 ## - 목차 -
